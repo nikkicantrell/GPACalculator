@@ -13,7 +13,7 @@ class FinalCalculator(object):
         return finalGrade
 
 if __name__ == "__main__":
-    if len(sys.argv) < 1:
+    if len(sys.argv) > 1:
         print("Usage: python FinalCalculator.py")
     else:
         print('Please note you can exit the program at any time by entering "quit"')
