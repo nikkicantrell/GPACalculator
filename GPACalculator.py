@@ -1,6 +1,6 @@
 import sys
 
-class Calculator(object):
+class GPACalculator(object):
 
     def __init__(self):
         pass
@@ -66,6 +66,6 @@ if __name__ == "__main__":
                 else:
                     break
             gradesAndCredits.append((creditsInt, grade))
-        calculator = Calculator()
+        calculator = GPACalculator()
         gpa = calculator.calculate(gradesAndCredits)
         print("Your gpa is: " + str(gpa))
