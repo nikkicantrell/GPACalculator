@@ -25,7 +25,7 @@ class GPACalculator(object):
         return float(qualityPts)/numCredits
 if __name__ == "__main__":
     if len(sys.argv) < 1:
-        print ("Usage: python calculator.py")
+        print ("Usage: python GPACalculator.py")
     else:
         print('Please note you can exit the program at any time by entering "quit"')
         while True:
