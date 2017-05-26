@@ -7,7 +7,7 @@ class FinalCalculator(object):
         """Calculates final grade"""
         finalGrade = 0
         for x in range(len(percentagesAndGrades)):
-            percentage = percentagesAndGrades[x][0]/100
+            percentage = float(percentagesAndGrades[x][0])/100
             grade = percentagesAndGrades[x][1]
             finalGrade += percentage*grade
         return finalGrade
@@ -24,12 +24,11 @@ class FinalCalculator(object):
         else:
             needed = 60 - currentGrade
         return (needed/percentage)*100
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        print("Usage: python FinalCalculator.py")
-    else:
-        print('Please note you can exit the program at any time by entering "quit"')
+    def promptNumSections(self):
+        tries = 0
         while True:
+            if tries > 10:
+                sys.exit()
             try:
                 numSections = raw_input("How many sections of the class are there? ")
                 numSectionsInt = int(numSections)
@@ -37,9 +36,14 @@ if __name__ == "__main__":
                 if numSections == "quit":
                     sys.exit()
                 print("Sorry your answer is not valid. Please enter a number.")
+                tries += 1
             else:
-                break
+                return numSectionsInt
+    def promptFunction(self):
+        tries = 0
         while True:
+            if tries > 10:
+                sys.exit()
             try:
                 function = raw_input("Enter 1 for a final grade calculator, or " +
                                      "2 for calculating what you need on a section ")
@@ -48,77 +52,114 @@ if __name__ == "__main__":
                 if function == "quit":
                     sys.exit()
                 print("Sorry your answer is not valid. Enter 1 or 2")
+                tries += 1
             else:
                 if functionInt != 1 and functionInt != 2:
                     print("Sorry your answer is not valid. Enter 1 or 2")
+                    tries += 1
                 else:
-                    break
+                    return functionInt
+    def promptLastPercentage(self):
+        tries = 0
+        while True:
+            if tries > 10:
+                sys.exit()
+            try:
+                percentageLast = raw_input("What perecentage is the section" +
+                                           " you are looking to find out the" +
+                                           " needed grade for? ")
+                percentageLastFloat = float(percentageLast)
+            except ValueError:
+                if percentageLast == "quit":
+                    sys.exit()
+                print("Sorry your answer is not valid. Please enter a number greater than 1.")
+                tries += 1
+            else:
+                #To catch if the user accidentally makes the percentage out of 1
+                if (percentageLastFloat < 1):
+                    print("Sorry your answer is not valid. Please enter a" +
+                          " number greater than 1.")
+                    tries += 1
+                else:
+                    return percentageLastFloat
+    def promptWantedGrade(self):
+        tries = 0
+        while True:
+            if tries > 10:
+                sys.exit()
+            wanted = raw_input("What final grade do you want to get in the class" +
+                               " (A, B, C, D)? ")
+            if wanted != "A" and wanted != "B" and wanted != "C" and wanted != "D":
+                if wanted == "quit":
+                    sys.exit()
+                print("Sorry your answer is not valid. Please enter one of" +
+                      " the following: A, B, C, D")
+                tries += 1
+            else:
+                return wanted
+    def promptPercentage(self, number):
+        tries = 0
+        while True:
+            if tries > 10:
+                sys.exit()
+            try:
+                percentage = raw_input("What perecentage is section #" +
+                                       str(number+1) + " worth(out of 100)? ")
+                percentageFloat = float(percentage)
+            except ValueError:
+                if percentage == "quit":
+                    sys.exit()
+                print("Sorry your answer is not valid. Please enter a number greater than 1.")
+                tries += 1
+            else:
+                #To catch if the user accidentally makes the percentage out of 1
+                if (percentageFloat < 1):
+                    print("Sorry your answer is not valid. Please enter a" +
+                          " number greater than 1.")
+                    tries += 1
+                else:
+                    return percentageFloat
+    def promptGrade(self, number):
+        tries = 0
+        while True:
+            if tries > 10:
+                sys.exit()
+            try:
+                grade = raw_input("What grade do you have in section #" +
+                                  str(number+1) + " (out of 100)? ")
+                gradeFloat = float(grade)
+            except ValueError:
+                if grade == "quit":
+                    sys.exit()
+                print("Sorry your answer is not valid. Please enter a number greater than 1.")
+                tries += 1
+            else:
+                #To catch if the user accidentally makes the grade out of 1
+                if (gradeFloat < 1):
+                    print("Sorry your answer is not valid. Please enter a" +
+                          " number greater than 1.")
+                    tries += 1
+                else:
+                    return gradeFloat
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        print("Usage: python FinalCalculator.py")
+    else:
+        finalCalculator = FinalCalculator()
+        print('Please note you can exit the program at any time by entering "quit"')
+        numSectionsInt = finalCalculator.promptNumSections()
+        functionInt = finalCalculator.promptFunction()
         if functionInt == 2:
-            while True:
-                try:
-                    percentageLast = raw_input("What perecentage is the section" +
-                                               " you are looking to find out the" +
-                                               " needed grade for? ")
-                    percentageLastFloat = float(percentageLast)
-                except ValueError:
-                    if percentageLast == "quit":
-                        sys.exit()
-                    print("Sorry your answer is not valid. Please enter a number.")
-                else:
-                    #To catch if the user accidentally makes the percentage out of 1
-                    if (percentageLastFloat < 1):
-                        print("Sorry your answer is not valid. Please enter a" +
-                              " number greater than 1")
-                    else:
-                        break
-            while True:
-                wanted = raw_input("What final grade do you want to get in the class" +
-                                   " (A, B, C, D)? ")
-                if wanted != "A" and wanted != "B" and wanted != "C" and wanted != "D":
-                    if numSections == "quit":
-                        sys.exit()
-                    print("Sorry your answer is not valid. Please enter one of" +
-                          " the follow: A, B, C, D")
-                else:
-                    break
+            percentageLastFloat = finalCalculator.promptLastPercentage()
+            wanted = finalCalculator.promptWantedGrade()
             #so the next part asks for one less of the sections
             numSectionsInt -= 1
         percentagesAndGrades = []
         for x in range(numSectionsInt):
-            while True:
-                try:
-                    percentage = raw_input("What perecentage is section#" +
-                                           str(x+1) + " worth(out of 100)? ")
-                    percentageFloat = float(percentage)
-                except ValueError:
-                    if percentage == "quit":
-                        sys.exit()
-                    print("Sorry your answer is not valid. Please enter a number.")
-                else:
-                    #To catch if the user accidentally makes the percentage out of 1
-                    if (percentageFloat < 1):
-                        print("Sorry your answer is not valid. Please enter a" +
-                              " number greater than 1")
-                    else:
-                        break
-            while True:
-                try:
-                    grade = raw_input("What grade do you have in section #" +
-                                      str(x) + " (out of 100)? ")
-                    gradeFloat = float(grade)
-                except ValueError:
-                    if grade == "quit":
-                        sys.exit()
-                    print("Sorry your answer is not valid. Please enter a number.")
-                else:
-                    #To catch if the user accidentally makes the grade out of 1
-                    if (gradeFloat < 1):
-                        print("Sorry your answer is not valid. Please enter a" +
-                              " number greater than 1")
-                    else:
-                        break
+            percentageFloat = finalCalculator.promptPercentage(x)
+            gradeFloat = finalCalculator.promptGrade(x)
             percentagesAndGrades.append((percentageFloat, gradeFloat))
-        finalCalculator = FinalCalculator()
         if functionInt == 1:
             finalGrade = finalCalculator.calculateFinal(percentagesAndGrades)
             print("Your final grade is: " + str(finalGrade))
