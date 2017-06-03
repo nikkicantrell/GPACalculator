@@ -15,7 +15,7 @@ class window(QWidget):
         self.setWindowTitle("GPA Calculator App")
         self.setLayout(self.layout)
     def getNumClasses(self):
-        numClasses, ok = QInputDialog.getInt(self, "integer input dialog", "Enter # of classes")
+        numClasses, ok = QInputDialog.getInt(self, "Number of classes", "Enter # of classes")
         if ok:
             self.numClasses = numClasses
     def openClassesWindow(self):
@@ -39,13 +39,19 @@ class window(QWidget):
         enterButton.setText("Calculate GPA")
         enterButton.clicked.connect(self.calculateGPA)
         self.layout.addRow(enterButton)
-
     def calculateGPA(self):
         creditsAndGrades = []
         for x in range(len(self.creditsLes)):
             creditsAndGrades.append((self.creditsLes[x].text().toInt()[0], str(self.gradesLes[x].text()).upper()))
-        self.gpa = GPACalculator.GPACalculator().calculate(creditsAndGrades)
-        self.openGPAWindow()
+        try:
+            if len(creditsAndGrades) != len(self.creditsLes):
+                self.error = "Makes sure no credits boxes are 0"
+                self.errorWindow()
+            self.gpa = GPACalculator.GPACalculator().calculate(creditsAndGrades)
+            self.openGPAWindow()
+        except Exception as e:
+            self.error = "Makes sure no credits boxes are 0"
+            self.errorWindow()
     def openGPAWindow(self):
         for x in range(len(self.creditsLes)):
             self.creditsLes[x].clear()
@@ -54,7 +60,11 @@ class window(QWidget):
         gpaMsgBox.setText("Your gpa is: " + str(self.gpa))
         gpaMsgBox.addButton(QMessageBox.Ok)
         gpaMsgBox.exec_()
-
+    def errorWindow(self):
+        errorMsgBox = QErrorMessage()
+        errorMsgBox.showMessage("Error: " + str(self.error))
+        errorMsgBox.exec_()
+        self.error = None
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = window()
